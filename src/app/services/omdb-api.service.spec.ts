@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs';
 import { IOMDBResponse } from '../omdbresponse';
 import { CommonModule } from '@angular/common';
+import { IOMDBResponse2 } from '../omdbmresponse2';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,18 @@ export class OmdbApiService {
 
   // To deploy on Firebase hosting – this should be https
   private _siteURL = "https://www.omdbapi.com/";
+  getMoviesData(movieName:string, page:number):Observable<IOMDBResponse2> {
+    return this._http.get<IOMDBResponse2>(this._siteURL+ this._key2 + movieName + "&page=" + page)
+    .pipe(
+      tap(data => console.log('Moviedata/error' + JSON.stringify(data))
+    ),
+    catchError(this.handleError)
+    );
+  }
 
   // Add your own API key from OMDBApi.com
   private _key = "?apikey=6a764513&t=";
+  private _key2 = "?apikey=6a764513&s=";
 
   constructor(private _http: HttpClient) { }
 
